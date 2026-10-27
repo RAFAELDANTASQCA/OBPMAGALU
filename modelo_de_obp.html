@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODELO DE OBP - GERADOR DE PARECERES</title>
+    <!-- TAILWIND CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GOOGLE FONTS: INTER -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FONTAWESOME ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            50: '#F0F4F9',
+                            100: '#E1E9F2',
+                            200: '#C3D3E5',
+                            300: '#94B2D2',
+                            400: '#5E8CB9',
+                            500: '#3B6EA0',
+                            600: '#2B5483',
+                            700: '#1E3E63',
+                            800: '#1B3452',
+                            900: '#0F172A',
+                        },
+                        brand: {
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            500: '#2563EB',
+                            600: '#1D4ED8',
+                            700: '#1E40AF',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* SCROLLBAR PERSONALIZADO */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.5);
+        }
+        /* FORÇA TODO O TEXTO VISÍVEL EM CAPS LOCK SEM QUEBRAR O HTML/JS */
+        body, input, select, textarea, button, p, span, div, h1, h2, h3, option {
+            text-transform: uppercase !important;
+        }
+    </style>
+</head>
+<body class="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-200 via-zinc-300 to-stone-400 dark:from-slate-950 dark:via-zinc-900 dark:to-neutral-950 text-slate-800 dark:text-slate-100 min-h-full font-sans antialiased flex flex-col justify-between transition-colors duration-200">
+
+    <!-- CABEÇALHO DA APLICAÇÃO DA HAUTE DESIGN -->
+    <header class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-white/40 dark:border-slate-800/80 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3.5">
+                <!-- LOGOS DA QCA E MAGALU ORIGINAIS E FIEIS -->
+                <div class="flex items-center space-x-3">
+                    <!-- LOGO QCA -->
+                    <div class="h-9 px-2.5 bg-[#191938] rounded-lg flex items-center justify-center shadow-md border border-white/10 hover:scale-105 transition-transform">
+                        <svg viewBox="0 0 160 60" class="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="50%" y="55%" dominant-baseline="central" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="800" font-size="42" fill="#c81a3a" letter-spacing="-2.5">qca</text>
+                        </svg>
+                    </div>
+
+                    <span class="text-slate-300 dark:text-slate-700 font-light text-sm">|</span>
+
+                    <!-- LOGO MAGALU -->
+                    <div class="h-9 px-2.5 bg-[#0086ff] rounded-lg flex items-center justify-center shadow-md border border-white/10 hover:scale-105 transition-transform">
+                        <span class="text-white font-black text-sm lowercase tracking-tighter font-sans select-none">magalu</span>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+
+                <div>
+                    <h1 class="text-xs sm:text-sm font-extrabold tracking-widest text-slate-900 dark:text-white uppercase">MODELO DE OBP</h1>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <!-- BOTÃO PARA ALTERNAR TEMA (CLARO/ESCURO) -->
+                <button id="themeToggleBtn" onclick="toggleDarkMode()" class="p-2.5 rounded-xl text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500" title="ALTERNAR TEMA DE CORES">
+                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL COM DESIGN CHIQUE -->
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-grow">
+        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/80 dark:border-slate-800 space-y-6 transition-all">
+
+            <form id="obpForm" class="space-y-6" onsubmit="event.preventDefault();">
+                
+                <!-- 1. ASSUNTO DO ACIONAMENTO -->
+                <div class="group">
+                    <label for="assunto" class="block text-[11px] font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mb-2 uppercase">
+                        ASSUNTO DO ACIONAMENTO
+                    </label>
+                    <div class="relative">
+                        <select id="assunto" class="w-full pl-4 pr-10 py-3.5 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 text-slate-900 dark:text-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all appearance-none cursor-pointer text-xs font-bold hover:bg-white dark:hover:bg-slate-800 hover:border-brand-500/40 shadow-sm">
+                            <option value="ATRASO NA ENTREGA" selected>ATRASO NA ENTREGA</option>
+                            <option value="CUMPRIMENTO DE SENTENÇA">CUMPRIMENTO DE SENTENÇA</option>
+                            <option value="ACORDO JUDICIAL">ACORDO JUDICIAL</option>
+                            <option value="COBRANÇA INDEVIDA">COBRANÇA INDEVIDA</option>
+                            <option value="AVARIA / DANIFICADO">AVARIA / DANIFICADO</option>
+                            <option value="PRODUTO DIVERGENTE">PRODUTO DIVERGENTE</option>
+                            <option value="EXTRAVIO / EXTRAVIADO">EXTRAVIO / EXTRAVIADO</option>
+                            <option value="SOLICITAÇÃO DE CANCELAMENTO">SOLICITAÇÃO DE CANCELAMENTO</option>
+                            <option value="RESTITUIÇÃO DE VALORES">RESTITUIÇÃO DE VALORES</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPOS DE RESPONSÁVEIS EMPILHADOS -->
+                <div class="space-y-6">
+                    
+                    <!-- 2. RESPONSÁVEL PELA VENDA -->
+                    <div class="group">
+                        <label for="respVenda" class="block text-[11px] font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mb-2 uppercase">
+                            QUEM É O RESPONSÁVEL PELA VENDA?
+                        </label>
+                        <div class="relative">
+                            <select id="respVenda" class="w-full pl-4 pr-10 py-3.5 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 text-slate-900 dark:text-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all appearance-none cursor-pointer text-xs font-bold hover:bg-white dark:hover:bg-slate-800 hover:border-brand-500/40 shadow-sm">
+                                <option value="ÉPOCA COSMÉTICOS" selected>ÉPOCA COSMÉTICOS</option>
+                                <option value="MAGAZINE LUIZA">MAGAZINE LUIZA</option>
+                                <option value="VENDEDOR TERCEIRO (MARKETPLACE)">VENDEDOR TERCEIRO</option>
+                                <option value="OUTRO">OUTRO</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. RESPONSÁVEL PELA ENTREGA -->
+                    <div class="group">
+                        <label for="respEntrega" class="block text-[11px] font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mb-2 uppercase">
+                            QUEM É O RESPONSÁVEL PELA ENTREGA?
+                        </label>
+                        <div class="relative">
+                            <select id="respEntrega" class="w-full pl-4 pr-10 py-3.5 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 text-slate-900 dark:text-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all appearance-none cursor-pointer text-xs font-bold hover:bg-white dark:hover:bg-slate-800 hover:border-brand-500/40 shadow-sm">
+                                <option value="ÉPOCA COSMÉTICOS" selected>ÉPOCA COSMÉTICOS</option>
+                                <option value="MAGAZINE LUIZA">MAGAZINE LUIZA</option>
+                                <option value="TRANSPORTADORA PARCEIRA">TRANSPORTADORA PARCEIRA</option>
+                                <option value="CORREIOS">CORREIOS</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. RESPONSÁVEL PELO PROCESSO -->
+                    <div class="group">
+                        <label for="respProcesso" class="block text-[11px] font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mb-2 uppercase">
+                            QUEM É O RESPONSÁVEL PELO PROCESSO?
+                        </label>
+                        <div class="relative">
+                            <select id="respProcesso" class="w-full pl-4 pr-10 py-3.5 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 text-slate-900 dark:text-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all appearance-none cursor-pointer text-xs font-bold hover:bg-white dark:hover:bg-slate-800 hover:border-brand-500/40 shadow-sm">
+                                <option value="ÉPOCA COSMÉTICOS" selected>ÉPOCA COSMÉTICOS</option>
+                                <option value="MAGAZINE LUIZA">MAGAZINE LUIZA</option>
+                                <option value="JURÍDICO / CORRÉU">JURÍDICO / CORRÉU</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 5. OBSERVAÇÃO (OBS) -->
+                <div class="group">
+                    <label for="obs" class="block text-[11px] font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mb-2 uppercase">
+                        OBSERVAÇÃO
+                    </label>
+                    <div class="relative">
+                        <select id="obs" class="w-full pl-4 pr-10 py-3.5 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 text-slate-900 dark:text-slate-100 rounded-2xl focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all appearance-none cursor-pointer text-xs font-bold leading-relaxed hover:bg-white dark:hover:bg-slate-800 hover:border-brand-500/40 shadow-sm">
+                            <option value="VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS E MATERIAIS" selected>VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS E MATERIAIS</option>
+                            <option value="VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS">VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS</option>
+                            <option value="VALOR REFERENTE À CONDENAÇÃO EM DANOS MATERIAIS">VALOR REFERENTE À CONDENAÇÃO EM DANOS MATERIAIS</option>
+                            <option value="VALOR REFERENTE AO ACORDO CELEBRADO ENTRE AS PARTES">VALOR REFERENTE AO ACORDO CELEBRADO ENTRE AS PARTES</option>
+                            <option value="PREZADOS, VERIFICAR COM O CORRÉU SE ELES IRÃO CUMPRIR">PREZADOS, VERIFICAR COM O CORRÉU SE ELES IRÃO CUMPRIR</option>
+                            <option value="VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS E RESTITUIÇÃO DO VALOR PAGO">VALOR REFERENTE À CONDENAÇÃO EM DANOS MORAIS E RESTITUIÇÃO DO VALOR PAGO</option>
+                            <option value="VALOR REFERENTE À CONDENAÇÃO EM RESTITUIÇÃO DO VALOR PAGO">VALOR REFERENTE À CONDENAÇÃO EM RESTITUIÇÃO DO VALOR PAGO</option>
+                            <option value="VALOR REFERENTE À CUSTAS RECURSAIS">VALOR REFERENTE À CUSTAS RECURSAIS</option>
+                            <option value="VALOR REFERENTE AOS HONORÁRIOS DO CONCILIADOR">VALOR REFERENTE AOS HONORÁRIOS DO CONCILIADOR</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400 group-hover:text-brand-500 transition-colors">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTÕES DE AÇÃO PREMIUM COM EFEITO SHIMMER E GLOW -->
+                <div class="pt-2 flex items-center gap-3">
+                    <button type="button" onclick="copyToClipboard()" class="relative overflow-hidden flex-1 bg-gradient-to-r from-blue-600 via-brand-600 to-indigo-700 hover:from-blue-700 hover:via-brand-700 hover:to-indigo-800 active:scale-[0.99] text-white font-extrabold tracking-wider py-4 px-6 rounded-2xl shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all duration-300 flex items-center justify-center gap-2.5 text-xs border border-white/20 group">
+                        <i class="fa-regular fa-copy text-sm group-hover:rotate-6 transition-transform"></i>
+                        <span>COPIAR</span>
+                    </button>
+                    <button type="button" onclick="resetForm()" class="bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-600 dark:text-slate-300 font-bold py-4 px-5 rounded-2xl transition-all duration-200 flex items-center gap-2 text-xs border border-transparent hover:border-slate-300 dark:hover:border-slate-600" title="REDEFINIR CAMPOS">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span class="hidden sm:inline">LIMPAR</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- RODAPÉ EGANTE -->
+    <footer class="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 py-4 text-center text-[10px] tracking-wider text-slate-500 dark:text-slate-400 mt-auto font-bold uppercase">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>MODELO DE OBP &copy; <span id="year"></span> • SISTEMA DE GERENCIAMENTO</span>
+            <span class="text-slate-400 dark:text-slate-500">PADRÃO: <strong class="font-extrabold text-brand-600 dark:text-brand-400">VALOR</strong></span>
+        </div>
+    </footer>
+
+    <!-- NOTIFICAÇÃO TOAST COM DESIGN GLASSMORPHISM -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 ease-out bg-slate-900/90 dark:bg-white/95 backdrop-blur-xl text-white dark:text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3 z-50 pointer-events-none border border-white/10 dark:border-slate-200">
+        <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-md">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span class="text-xs font-extrabold tracking-wider">TEXTO COPIADO COM SUCESSO!</span>
+    </div>
+
+    <!-- SCRIPT DE LÓGICA DA APLICAÇÃO -->
+    <script>
+        // ATUALIZA O ANO NO RODAPÉ
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // GERENCIADOR DE TEMA ESCURO / CLARO
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // CARREGA A PREFERÊNCIA DO TEMA
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
+        }
+
+        // REFERÊNCIAS DOS ELEMENTOS DO FORMULÁRIO
+        const assuntoSelect = document.getElementById('assunto');
+        const respVendaSelect = document.getElementById('respVenda');
+        const respEntregaSelect = document.getElementById('respEntrega');
+        const respProcessoSelect = document.getElementById('respProcesso');
+        const obsSelect = document.getElementById('obs');
+
+        // GERA O TEXTO FORMATADO DA OBP
+        function getOBPText() {
+            const assunto = assuntoSelect.value.toUpperCase();
+            const respVenda = respVendaSelect.value.toUpperCase();
+            const respEntrega = respEntregaSelect.value.toUpperCase();
+            const respProcesso = respProcessoSelect.value.toUpperCase();
+            const obs = obsSelect.value.toUpperCase();
+
+            return `ASSUNTO DO ACIONAMENTO: ${assunto}\nQUEM É O RESPONSÁVEL PELA VENDA? ${respVenda}\nQUEM É O RESPONSÁVEL PELA ENTREGA? ${respEntrega}\nQUEM É O RESPONSÁVEL PELO PROCESSO? ${respProcesso}\n\nOBS: ${obs}`;
+        }
+
+        // COPIAR TEXTO DIRETO PARA A ÁREA DE TRABALHO
+        function copyToClipboard() {
+            const formattedText = getOBPText();
+
+            // CRIA UM TEXTAREA TEMPORÁRIO PARA COPIAR O TEXTO
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = formattedText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            tempTextArea.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('ERRO AO COPIAR O TEXTO: ', err);
+            } finally {
+                document.body.removeChild(tempTextArea);
+            }
+        }
+
+        // EXIBIR NOTIFICAÇÃO TOAST
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // RESETAR FORMULÁRIO
+        function resetForm() {
+            document.getElementById('obpForm').reset();
+        }
+    </script>
+</body>
+</html>
